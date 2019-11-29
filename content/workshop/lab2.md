@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Lab 2"
 weight: 20
 ---
 
