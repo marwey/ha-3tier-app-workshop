@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-weight: 10
+weight: 20
 ---
 
 This page introduces the material and the collection of labs.
