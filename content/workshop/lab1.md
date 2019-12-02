@@ -115,5 +115,5 @@ Associate the route table with the Application subnets:
 ![Figure 18](/images/figure18.png)
 
 At this point we have finished building the network environment so we’re ready to start
-creating the web servers and autoscaling groups.
+creating the database cluster.
 
