@@ -1,15 +1,7 @@
 ---
-title: "Lab 1: Setup your environment"
+title: "Lab 1: Configure the network"
 weight: 10
 ---
-
-
-## Introduction
-
-The intent of this workshop is to provide a set of best practices for building highly resilient
-Wordpress environments on Amazon Web Services (AWS)
-
-## Configure the network environment
 
 ### Create a new Virtual Private Cloud (VPC)
 
