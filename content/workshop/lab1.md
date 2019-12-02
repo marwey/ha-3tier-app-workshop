@@ -1,5 +1,5 @@
 ---
-title: "Lab 1: Create your Webserver"
+title: "Lab 1: Setup your environment"
 weight: 10
 ---
 
@@ -16,46 +16,45 @@ Wordpress environments on Amazon Web Services (AWS)
 As a starting point for the workshop you will need to login to your AWS account, select the
 region of your choice and create a new VPC using the following settings:
 
-```
-Figure 1 - Create a new VPC
-```
-### Create public and private subnets in the new VPC..........................................................................
+![Figure 1 - Create a new VPC](/images/figure1.png)
+
+### Create public and private subnets in the new VPC
 
 Once the VPC has been created, the next step is to create the subnets that will be used to
 host the application across two different Availability Zones. We are going to create six
 subnets in total, three for each AZ, as shown in the following diagram:
 
-```
-Figure 2 – Network environment
-```
+![Figure 2](/images/figure2.png)
 
 To create each of the six subnets please navigate to the VPC dashboard of your account,
 select **Subnets** , then click on **Create subnet** and use the details below. Make sure to always
 select the **Wordpress-workshop** VPC when creating the subnets.
 
-```
-Subnet Name Subnet CIDR Subnet location
-Public Subnet A 192.168.0.0/24 eu-west-1a
-Public Subnet B 192.168.1.0/24 eu-west-1b
-Application Subnet A 192.168.2.0/24 eu-west-1a
-Application Subnet B 192.168.3.0/24 eu-west-1b
-Data Subnet B 192.168. 4 .0/24 eu-west-1a
-Data Subnet B 192.168. 5 .0/24 eu-west-1b
-```
-_Figure 3 - Create the first public subnet in eu-west-1a_
+![Table 1](/images/table1.png)
 
+Create the first public subnet in eu-west-1a:
 
-_Figure 4 - Create the second public subnet in eu-west-1b_
+![Figure 3](/images/figure3.png)
 
-_Figure 5 - Create the first application subnet in eu-west-1a_
+Create the second public subnet in eu-west-1b:
 
+![Figure 4](/images/figure4.png)
 
-_Figure 6 - Create the second application subnet in eu-west-1b_
+Create the first application subnet in eu-west-1a:
 
-_Figure 7 - Create the first data subnet in eu-west-1a_
+![Figure 5](/images/figure5.png)
 
+Create the second application subnet in eu-west-1b:
 
-_Figure 8 - Create the second data subnet in eu-west-1b_
+![Figure 6](/images/figure6.png)
+
+Create the first data subnet in eu-west-1a:
+
+![Figure 7](/images/figure7.png)
+
+Create the second data subnet in eu-west-1b:
+
+![Figure 8](/images/figure8.png)
 
 At this point all the correct subnets have been created so we can proceed with the routing
 and NAT configuration.
@@ -66,15 +65,13 @@ The Wordpress instances will need to be able to connect to the Internet and down
 application or OS updates so we’re going to create two NAT gateways, one for each
 availability zone where the application is deployed.
 
-```
-Figure 9 - NAT Gateways
-```
+![Figure 9](/images/figure9.png)
 
 Go to the VPC dashboard in your account, select **NAT Gateways** and create one gateway for
 each of the two public subnets (i.e. Public Subnet A and Public Subnet B) Always make sure
 you have selected the correct public subnet when creating the gateway.
 
-_Figure 10 - Create a NAT gateway_
+![Figure 10](/images/figure10.png)
 
 ### Create an Internet Gateway and set up routing
 
@@ -85,12 +82,11 @@ from the private subnets to the Internet.
 First you need to create a new Internet Gateway from your VPC dashboard and attach it to
 the **Wordpress-workshop** VPC:
 
-```
-Figure 11 - Create an Internet Gateway
-```
-```
-Figure 12 – Attach the gateway to your VPC
-```
+![Figure 11](/images/figure11.png)
+
+Attach the gateway to your VPC:
+
+![Figure 12](/images/figure12.png)
 
 The gateway will be used by instances and services hosted in the public subnets (e.g. Public
 Subnet A and Public Subnet B) to communicate over the Internet.
@@ -98,31 +94,33 @@ Subnet A and Public Subnet B) to communicate over the Internet.
 Once the gateway is created you will need to create a new routing table and associate it with
 the public subnets:
 
-_Figure 13 - Create the routing table for public instances_
+![Figure 13](/images/figure13.png)
 
 After creating the routing table select it from the **Route Tables** section of your VPC
 dashboard, then click on **Edit routes** and add a default route via the Internet Gateway
 created in the previous step:
 
-_Figure 14 - Point your default route to the Internet Gateway_
+![Figure 14](/images/figure14.png)
 
 Finally, you need to associate the newly created routing table with the public subnets. To do
 that, click on the respective route table, then click on **Subnet Associations** and select the
 two public subnets created earlier:
 
-
-_Figure 15 - Associate the public routing table with the public subnets_
+![Figure 15](/images/figure15.png)
 
 The process must be repeated for the private subnets as well, the main difference being that
 routing to the Internet will be provided in this case by the NAT gateways instead of the
 Internet Gateways:
 
-_Figure 16 - Create a new route table for the Application subnets_
+![Figure 16](/images/figure16.png)
 
-_Figure 17 - Edit the route table and add the default route via the NAT gateway_
+Edit the route table and add the default route via the NAT gateway:
 
+![Figure 17](/images/figure17.png)
 
-_Figure 18 - Associate the route table with the Application subnets_
+Associate the route table with the Application subnets:
+
+![Figure 18](/images/figure18.png)
 
 At this point we have finished building the network environment so we’re ready to start
 creating the web servers and autoscaling groups.
@@ -141,12 +139,17 @@ To get started select **Launch configurations** in your EC2 dashboard, then clic
 launch configuration**. On the next screen select the second Amazon Linux AMI, as
 highlighted below:
 
-_Figure 19 – Select the AMI_
+Select the AMI:
 
+![Figure 19](/images/figure19.png)
 
-_Figure 20 - Select the instance type_
+Select the instance type:
 
-_Figure 21 - Configure details_
+![Figure 20](/images/figure20.png)
+
+Configure details:
+
+![Figure 21](/images/figure21.png)
 
 When reaching the **Configure security group** page, please select the default security group
 for the VPC you have created earlier, then click **Review** to review and submit the final
@@ -160,17 +163,18 @@ group for the Wordpress web servers. To do that select **Auto Scaling Groups** i
 dashboard, click on **Create Auto Scaling Group** and select the previously created launch
 configuration:
 
-_Figure 22 - Select the Wordpress-workshop launch configuration_
+Select the Wordpress-workshop launch configuration:
+
+![Figure 22](/images/figure22.png)
 
 In the next screen make sure that the correct VPC is selected, together with the correct
 subnets for the web servers (i.e. Application Subnet A and Application Subnet B):
 
-
-_Figure 23 - Configure the ASG_
+![Figure 23](/images/figure23.png)
 
 Next, configure the scaling policies as follows:
 
-_Figure 24 - Configure the scaling policies_
+![Figure 24](/images/figure24.png)
 
 ### Set up Elastic Load Balancing
 
@@ -181,42 +185,41 @@ platform.
 To create a new Elastic Load Balancer select **Load Balancers** in your EC2 dashboard, click on
 **Create Load Balancer** and follow the guidelines below:
 
+Select Application Load Balancer:
 
-_Figure 25 - Select Application Load Balancer_
+![Figure 25](/images/figure25.png)
 
 When configuring the load balancer make sure you choose the correct VPC, together with
 the correct public subnets from each Availability Zone:
 
-_Figure 26 - Configure the load balancer_
+![Figure 26](/images/figure26.png)
 
 Then select the default security group associated with your VPC:
 
-
-_Figure 27 - Select the security group_
+![Figure 27](/images/figure27.png)
 
 Configure the target groups and routing policies:
 
-_Figure 28 – Create a new target group_
+![Figure 28](/images/figure28.png)
 
 Now add the two instances created by the autoscaling group in the previous step to the
 ELB’s registered targets:
 
-
-_Figure 29 - Register your instances as targets_
+![Figure 29](/images/figure29.png)
 
 Once you submit the final configuration you will be able to see the load balancer in your EC
 dashboard:
 
-_Figure 30 - The Load Balancer has been successfully created_
+![Figure 30](/images/figure30.png)
 
 As a last step, go back to the Autoscaling Groups, select **Wordpress-workshop-ASG** , then
 click on **Actions** , **Edit** and add the ELB target group created earlier (i.e. Wordpress-
 workshop) under the **Target Groups** setting:
 
+![Figure 31](/images/figure31.png)
 
-_Figure 31 - Add the correct ELB target group_
 
-### Install and configure Wordpress...................................................................................................
+### Install and configure Wordpress
 
 ## Set up the Elastic File System (EFS) back-end
 
