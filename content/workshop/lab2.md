@@ -26,7 +26,7 @@ Select the MySQL-compatible Aurora engine:
 
 ![Figure 4](/images/rds4.png)
 
-When prompted about the Master password, you can either click on Auto generate a password or create your own – in either case please make sure you write down the password as it will be required a few steps further when setting up the DB connectivity of the Wordpress instances.
+When prompted about the Master password, you can either click on Auto generate a password or create your own – in either case please make sure you write down the password as it will be required a few steps later when setting up the DB connectivity of the Wordpress instances.
 
 ![Figure 5](/images/rds5.png)
 
