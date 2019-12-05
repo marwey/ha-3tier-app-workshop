@@ -1,6 +1,5 @@
 ---
-title: "Building for High Availability"
-chapter: true
+title: "Overview"
 weight: 100
 ---
 

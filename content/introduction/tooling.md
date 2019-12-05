@@ -1,6 +1,5 @@
 ---
 title: "Tooling"
-chapter: true
 weight: 200
 ---
 

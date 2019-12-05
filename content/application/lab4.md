@@ -1,6 +1,6 @@
 ---
-title: "Lab 4"
-weight: 40
+title: "Lab 4: Create a shared filesystem"
+weight: 200
 ---
 
 This page introduces the material and the collection of labs.

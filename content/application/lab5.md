@@ -1,6 +1,6 @@
 ---
 title: "Lab 5: Autoscaling and load balancing"
-weight: 50
+weight: 300
 ---
 
 ### Create a launch configuration for the Auto Scaling Groups (ASG)

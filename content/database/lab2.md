@@ -1,6 +1,6 @@
 ---
 title: "Lab 2: Set up your RDS database"
-weight: 20
+weight: 200
 ---
 
 ### Create an RDS subnet group

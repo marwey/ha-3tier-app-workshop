@@ -1,6 +1,6 @@
 ---
 title: "Lab 3: Set up Elasticache for Memcached"
-weight: 30
+weight: 300
 ---
 
 Memcached is a server-side caching mechanism that reduces the database load by caching common database queries, leading to a faster loading Wordpress website.

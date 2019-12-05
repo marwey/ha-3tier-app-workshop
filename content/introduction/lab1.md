@@ -1,6 +1,6 @@
 ---
 title: "Lab 1: Configure the network"
-weight: 10
+weight: 400
 ---
 
 ### Create a new Virtual Private Cloud (VPC)
