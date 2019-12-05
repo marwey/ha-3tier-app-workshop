@@ -66,6 +66,13 @@ a:hover {
     transition: width 0.5s ease;
     background-color: var(--MAIN-LINK-HOVER-color);
 }
+
+#body img {
+    border: 1px solid orange;
+    box-shadow: 10px 10px 5px grey;
+    max-width: 80%;
+}
+
 #sidebar {
 	background-color: var(--MENU-SECTIONS-BG-color);
 }
@@ -188,4 +195,3 @@ div.notices.info p {
   letter-spacing: .15px;
   line-height: 150% !important;
 }
-
