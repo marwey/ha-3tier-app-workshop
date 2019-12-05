@@ -1,5 +1,5 @@
 ---
-title: "Building for High Availability"
+title: "Getting Started"
 chapter: true
 weight: 10
 ---

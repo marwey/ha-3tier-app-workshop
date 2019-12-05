@@ -1,6 +1,7 @@
 ---
-title: "Introduction"
-weight: 01
+title: "Building for High Availability"
+chapter: true
+weight: 100
 ---
 
 The intent of this workshop is to provide a set of best practices for building highly resilient Wordpress environments on Amazon Web Services (AWS)
