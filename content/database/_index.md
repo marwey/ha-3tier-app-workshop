@@ -4,4 +4,6 @@ chapter: true
 weight: 20
 ---
 
-In this workshop, we will explore how to configure your VPC, EC2, EFS, and ElastiCache to build a highly available, auto-scaling 3-tier web application.
+Now that you have created a virtual network across multiple data centers you will create a resilient, cached, highly-available data tier designed to support your Wordpress installation.  To do this you will, over the next 2 labs, create a active / passive database deployment using Amazon Relational Database Service (RDS) and then add caching to the database using the managed caching service Amazon ElastiCache.  
+
+To start move on to the next lab where you will create an active / passive database deployment.

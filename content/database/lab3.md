@@ -17,3 +17,6 @@ Finally, click on **Create** to start building your cluster. Once the cluster ha
 
 ![Figure 3](/images/ec3.png)
 
+---
+
+You have now created a resilient active / standby database deployment with a caching layer that is distributed across multiple data centers.  In the next set of labs you will build the application tier which will deploy Wordpress to begin using the data tier and serving your customers.
