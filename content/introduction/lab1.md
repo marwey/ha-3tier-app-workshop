@@ -117,3 +117,6 @@ Associate the route table with the Application subnets:
 At this point we have finished building the network environment so we’re ready to start
 creating the database cluster.
 
+---
+
+Now that you've created your network let's start building the data tier with a relational database.
