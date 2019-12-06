@@ -5,10 +5,12 @@ weight: 400
 
 ### Create a new Virtual Private Cloud (VPC)
 
-As a starting point for the workshop you will need to login to your AWS account, select the
-region of your choice and create a new VPC using the following settings:
+As a starting point for the workshop you will need to login to your AWS account, select the region of your choice and create a new VPC.
+
+To do this click on **Your VPCs** on the left hand side of the console and click **Create VPC**.  Enter a name for your VPC and a CIDR range such as the one below.  When you're fiinished click **Create**.
 
 ![Figure 1 - Create a new VPC](/images/figure1.png)
+
 
 ### Create public and private subnets in the new VPC
 
