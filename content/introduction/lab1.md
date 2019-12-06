@@ -59,7 +59,7 @@ availability zone where the application is deployed.
 
 ![Figure 9](/images/figure9.png)
 
-Go to the VPC dashboard in your account, select **NAT Gateways** and create one gateway for
+Go to the VPC dashboard in your account, select **NAT Gateways** and create one gateway in 
 each of the two public subnets (i.e. Public Subnet A and Public Subnet B) Always make sure
 you have selected the correct public subnet when creating the gateway.
 
@@ -106,13 +106,15 @@ Internet Gateways:
 
 ![Figure 16](/images/figure16.png)
 
-Edit the route table and add the default route via the NAT gateway:
+Edit the route table and add the default route via the NAT gateway in Application subnet A:
 
 ![Figure 17](/images/figure17.png)
 
-Associate the route table with the Application subnets:
+Associate the route table with Application Subnet A:
 
 ![Figure 18](/images/figure18.png)
+
+Repeat the last three steps to also create a route table for Application Subnet B which uses the NAT gateway deployed in the second availability zone.
 
 At this point we have finished building the network environment so we’re ready to start
 creating the database cluster.
