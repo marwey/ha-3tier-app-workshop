@@ -24,47 +24,23 @@ To create each of the six subnets please navigate to the VPC dashboard of your a
 select **Subnets** , then click on **Create subnet** and use the details below. Make sure to always
 select the **Wordpress-workshop** VPC when creating the subnets.
 
-![Table 1](/images/table1.png)
-
-Create the first public subnet in eu-west-1a:
-
 ![Figure 3](/images/figure3.png)
 
-Create the second public subnet in eu-west-1b:
+{{% notice info %}}
+The screenshots below were taken in Ireland (eu-west-1), if you are building in a different AWS region please just ensure that you create your subnets in 2 different availability zones in the same region, such as **us-west-2a** and **us-west-2b**.
+{{% /notice %}}
 
-![Figure 4](/images/figure4.png)
+For each subnet specify a name and a CIDR range for the subnet.  Be sure and create a public, application, and data subnet in each of two availability zones as detailed in the table below.
 
-Create the first application subnet in eu-west-1a:
+![Table 1](/images/table1.png)
 
-![Figure 5](/images/figure5.png)
-
-Create the second application subnet in eu-west-1b:
-
-![Figure 6](/images/figure6.png)
-
-Create the first data subnet in eu-west-1a:
-
-![Figure 7](/images/figure7.png)
-
-Create the second data subnet in eu-west-1b:
-
-![Figure 8](/images/figure8.png)
-
-At this point all the correct subnets have been created so we can proceed with the routing
-and NAT configuration.
+At this point all the correct subnets have been created and they can route network traffic between them.  In the next set of steps you will create an Internet Gateway, allowing communication between your VPC and the Internet.  You will also configure your routing tables to only allow internet communication with your public subnets and not the private application or data subnets.
 
 ### Create an Internet Gateway and set up routing
 
-The following steps will enable routing between the various subnets created earlier,
-together with connectivity from the Internet to the public subnets and also connectivity
-from the private subnets to the Internet.
+The following steps will allow connectivity from the Internet to the public subnets and also connectivity from the private subnets to the Internet via NAT gateways.
 
-First you need to create a new Internet Gateway from your VPC dashboard and attach it to
-the **Wordpress-workshop** VPC:
-
-![Figure 11](/images/figure11.png)
-
-Attach the gateway to your VPC:
+First you need to create a new Internet Gateway (IGW) from your VPC dashboard and attach it to the **Wordpress-workshop** VPC.  Start by clicking **Internet Gateways** on the left hand side of the VPC console and then click the **Create internet gateway** button.  Enter a name for your IGW such as `WP Internet Gateway` and click **Create**.  After the IGW has been created you need to associate it with your VPC by attaching it to your VPC:
 
 ![Figure 12](/images/figure12.png)
 
