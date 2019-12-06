@@ -7,7 +7,7 @@ weight: 300
 
 A launch configuration is an instance configuration template that an Auto Scaling Group uses to launch EC2 instances. When you create launch configurations you need to specify configuration information for the instances, including the ID of the Amazon Machine Image (AMI), the instance type, a key pair, one or more security groups, and a block device mapping. 
 
-To get started select **Launch configurations** in your EC2 dashboard, then click on **Create launch configuration**. On the next screen select the second Amazon Linux AMI, as highlighted below:
+To get started select **Launch configurations** in your EC2 dashboard, then click on **Create launch configuration**. On the next screen click on the **AWS Marketplace** tab, search for **Wordpress** and select the AMI highlighted below:
 
 ![Figure 1](/images/asg1.png)
 
@@ -19,6 +19,15 @@ Create your launch configuration:
 
 ![Figure 3](/images/asg3.png)
 
+Paste the script below in the User Data field, while replacing the parameters accordingly:
+```
+#!/bin/bash
+cd /opt/bitnami/apps/wordpress/htdocs
+rm wp-config.php
+sudo -u bitnami -i -- wp core config --dbname=workshop --dbuser=wpadmin --dbpass=<Your RDS Master password> --dbhost=<The endpoint of your DB cluster or writer node>
+sudo -u bitnami -i -- wp db create
+sudo -u bitnami -i -- wp core install --url=`curl http://169.254.169.254/latest/meta-data/public-ipv4` --title=Wordpress-Workshop --admin_user=wpadmin --admin_password=AlwaysCh00seAStrongPassw0rd --admin_email=admin@example.com
+```
 When reaching the **Configure security group** page, please select the default security group for the VPC you have created earlier, then click **Review** to review and submit the final configuration.
 
 ### Create the ASG for the back-end web servers
@@ -39,7 +48,7 @@ Next, configure the scaling policies as follows:
 
 A load balancer distributes incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones, increasing the availability of the Wordpress platform.
 
-To create a new Elastic Load Balancer select **Load Balancers** in your EC2 dashboard, click on **Create Load Balancer** and follow the guidelines below:
+To create a new Application Load Balancer select **Load Balancers** in your EC2 dashboard, click on **Create Load Balancer** and follow the guidelines below:
 
 ![Figure 7](/images/asg7.png)
 

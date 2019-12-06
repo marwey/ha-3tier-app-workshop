@@ -42,6 +42,15 @@ Finally, click on Create database to start building the cluster:
 
 ![Figure 8](/images/rds8.png)
 
+Once you have created the database cluster, click Modify to see the associated security group:
+
+![Figure 9](/images/rds9.png)
+
+Then browse to the VPC dashboard and modify the group to allow traffic from **Application Subnet A** and **Application Subnet B** on port 3306/tcp (MySQL). 
+
+![Figure 10](/images/rds10.png)
+ 
+
 ---
 
 Wordpress uses its database to house articles, users, and configuration information.  This can result in a lot of unnecessary queries against the database which consistently return the same data set.  To offset the strain on the database and improve performance of the Wordpress web application let's add a caching layer for common SQL requests.  In the next lab you will deploy a database caching layer for use by Wordpress.
