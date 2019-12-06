@@ -66,9 +66,9 @@ two public subnets created earlier:
 
 ### Create NAT gateways across the public subnets
 
-The Wordpress instances will need to be able to connect to the Internet and download
-application or OS updates so we’re going to create two NAT gateways, one for each
-availability zone where the application is deployed.
+The Wordpress instances will need to be able to connect to the Internet and download application or OS updates so we’re going to create two NAT gateways, one for each availability zone where the application is deployed.
+
+To do this you will create a NAT Gateway for each availability zone, then create a routing table for the application subnet in each availability zone, update the routing table with a path to the NAT gateway, and then associate it with the application subnet.
 
 ![Figure 9](/images/figure9.png)
 
@@ -92,9 +92,6 @@ Associate the route table with Application Subnet A:
 
 Repeat the last three steps to also create a route table for Application Subnet B which uses the NAT gateway deployed in the second availability zone.
 
-At this point we have finished building the network environment so we’re ready to start
-creating the database cluster.
-
 ---
 
-Now that you've created your network let's start building the data tier with a relational database.
+You have now created a virtual private cloud network across 2 availability zones within an AWS region.  You have created 6 subnets, 3 in each availability zone, and have configured a route so that the internet can communicate with resources in the public subnets and vice versa.  The application subnets have been configured, via routing table, to communicate with the internet via NAT gateways in the public subnets, and the data subnets can only communicate with resources in the 6 subnets, but not the internet.  You are now ready to start creating the database cluster.
