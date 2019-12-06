@@ -9,7 +9,7 @@ To get started with Elasticache, open its dashboard by searching for the service
 
 ![Figure 1](/images/ec1.png)
 
-Then click on **Advanced Memcached settings** and make sure you create a new subnet group consisting of the Application subnets of both availability zones:
+Then click on **Advanced Memcached settings** and make sure you create a new subnet group consisting of the Data subnets of both availability zones:
 
 ![Figure 2](/images/ec2.png)
 
