@@ -51,20 +51,6 @@ Create the second data subnet in eu-west-1b:
 At this point all the correct subnets have been created so we can proceed with the routing
 and NAT configuration.
 
-### Create NAT gateways across the public subnets
-
-The Wordpress instances will need to be able to connect to the Internet and download
-application or OS updates so we’re going to create two NAT gateways, one for each
-availability zone where the application is deployed.
-
-![Figure 9](/images/figure9.png)
-
-Go to the VPC dashboard in your account, select **NAT Gateways** and create one gateway in 
-each of the two public subnets (i.e. Public Subnet A and Public Subnet B) Always make sure
-you have selected the correct public subnet when creating the gateway.
-
-![Figure 10](/images/figure10.png)
-
 ### Create an Internet Gateway and set up routing
 
 The following steps will enable routing between the various subnets created earlier,
@@ -100,9 +86,21 @@ two public subnets created earlier:
 
 ![Figure 15](/images/figure15.png)
 
-The process must be repeated for the private subnets as well, the main difference being that
-routing to the Internet will be provided in this case by the NAT gateways instead of the
-Internet Gateways:
+### Create NAT gateways across the public subnets
+
+The Wordpress instances will need to be able to connect to the Internet and download
+application or OS updates so we’re going to create two NAT gateways, one for each
+availability zone where the application is deployed.
+
+![Figure 9](/images/figure9.png)
+
+Go to the VPC dashboard in your account, select **NAT Gateways** and create one gateway in 
+each of the two public subnets (i.e. Public Subnet A and Public Subnet B) Always make sure
+you have selected the correct public subnet when creating the gateway.
+
+![Figure 10](/images/figure10.png)
+
+Now we need to create route tables for each of the two Application subnets and use the NAT gateways created earlier as the default gateway:
 
 ![Figure 16](/images/figure16.png)
 
