@@ -7,7 +7,11 @@ weight: 300
 
 A launch configuration is an instance configuration template that an Auto Scaling Group uses to launch EC2 instances. When you create launch configurations you need to specify configuration information for the instances, including the ID of the Amazon Machine Image (AMI), the instance type, a key pair, one or more security groups, and a block device mapping. 
 
-To get started select **Launch configurations** in your EC2 dashboard, then click on **Create launch configuration**. On the next screen click on the **AWS Marketplace** tab, search for **Wordpress** and select the AMI highlighted below:
+First you will need to create a new security group that allows access from the security group of your Load Balancers to your web servers, on port 80/tcp:
+
+![Figure 1] (/images/sg1.png)
+
+Once you've done that, select **Launch configurations** in your EC2 dashboard, then click on **Create launch configuration**. On the next screen click on the **AWS Marketplace** tab, search for **Wordpress** and select the AMI highlighted below:
 
 ![Figure 1](/images/asg1.png)
 
@@ -20,7 +24,7 @@ Create your launch configuration:
 ![Figure 3](/images/asg3.png)
 
 Paste the script below in the User Data field, while replacing the parameters accordingly:
-```
+```bash
 #!/bin/bash
 cd /opt/bitnami/apps/wordpress/htdocs
 rm wp-config.php
@@ -123,7 +127,7 @@ fi
 chkconfig httpd on
 service httpd start
 ```
-When reaching the **Configure security group** page, please select the default security group for the VPC you have created earlier, then click **Review** to review and submit the final configuration.
+When reaching the **Configure security group** page, please select the **ALB_to_application** security group that you've created earlier and then click **Review** to review and submit the final configuration.
 
 ### Create the ASG for the back-end web servers
 
