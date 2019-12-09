@@ -11,6 +11,7 @@ To do this click on **Your VPCs** on the left hand side of the console and click
 
 ![Figure 1 - Create a new VPC](/images/figure1.png)
 
+After the VPC has been created select it in the AWS VPC console and click **Actions -> Edit DNS hostnames**.  Tick the box to enable DNS hostnames and click **Save**.
 
 ### Create public and private subnets in the new VPC
 

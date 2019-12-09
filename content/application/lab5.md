@@ -34,11 +34,22 @@ What follows is potential alternate user data based on reference architecture to
 {{% /notice %}}
 ```bash
 #!/bin/bash -xe
+
+EFS_MOUNT="fs-60d43c38.efs.eu-central-1.amazonaws.com"
+
+DB_NAME="wordpress"
+DB_HOSTNAME="wpdbv2-instance-1.cdq1du7ewx3u.eu-central-1.rds.amazonaws.com"
+DB_USERNAME="dbadmin"
+DB_PASSWORD="DbPassword$"
+
+WP_ADMIN="wpadmin"
+WP_PASSWORD="WpPassword$"
+
 yum update -y
 yum install -y awslogs httpd24 mysql56 php55 php55-devel php55-pear php55-mysqlnd gcc-c++ php55-opcache
 
 mkdir -p /var/www/wordpress
-mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 <EFS-HOSTNAME>:/ /var/www/wordpress
+mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 $EFS_MOUNT:/ /var/www/wordpress
 
 ## create site config
 cat <<EOF >/etc/httpd/conf.d/wordpress.conf
@@ -75,8 +86,8 @@ if [ ! -d /var/www/wordpress/wordpress ]; then
    # use public alb host name if wp domain name was empty
    if ! $(wp core is-installed --allow-root); then
        wp core download --version='4.9' --locale='en_GB' --allow-root
-       wp core config --dbname='wordpress' --dbuser='dbmaster' --dbpass='DbPassword$' --dbhost='wordpress-rds-ffdy24jlaxs6-databasecluster-1etthn91mlqhs.cluster-cytbfylghhjz.us-west-2.rds.amazonaws.com' --dbprefix=wp_ --allow-root
-       wp core install --url='http://www.example.com' --title='Wordpress on AWS' --admin_user='wp-admin' --admin_password='secret' --admin_email='wp-admin@example.com' --skip-email --allow-root
+       wp core config --dbname="$DB_NAME" --dbuser="$DB_USERNAME" --dbpass="$DB_PASSWORD" --dbhost="$DB_HOSTNAME" --dbprefix=wp_ --allow-root
+       wp core install --url='http://www.example.com' --title='Wordpress on AWS' --admin_user="$WP_ADMIN" --admin_password="$WP_PASSWORD" --admin_email='admin@example.com' --allow-root
        wp plugin install w3-total-cache --allow-root
        # sed -i \"/$table_prefix = 'wp_';/ a \\define('WP_HOME', 'http://' . \\$_SERVER['HTTP_HOST']); \" /var/www/wordpress/wordpress/wp-config.php
        # sed -i \"/$table_prefix = 'wp_';/ a \\define('WP_SITEURL', 'http://' . \\$_SERVER['HTTP_HOST']); \" /var/www/wordpress/wordpress/wp-config.php
