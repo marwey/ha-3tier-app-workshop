@@ -13,6 +13,8 @@ Then you created a distributed NFS share using Amazon Elastic Filesystem (EFS) t
 
 Finally, using AWS auto scaling and the AWS Application Load Balancer you created a collection of virtual machines that will automatically scale out and back in based upon resource utilization and in response to the number of users hitting your application server.  As new servers come online the load balancer will automatically be updated with their information, as servers are removed the auto scaling group will inform the load balancer and drain connections from those servers.
 
+One step that is missing is we have not yet configured Wordpress to use the Memcached deployment we created.  To do this you can follow the [Wordpress / Memcached instructions](https://aws.amazon.com/elasticache/memcached/wordpress-with-memcached/) on the AWS website.  The necessary plugins and libraries are installed by the user data earlier in Lab 5, however you need to manually configure them through the Wordpress Web UI to use your Memcached deployment.
+
 All of this produces a highly-available, distributed, and fault tolerate web application.  The pattern demonstrated in this lab can be re-used for many other, common, web application technologies.  Anywhere where state can be externalized to a filesystem, cache, or database.
 
 We hope that you have enjoyed this lab and will continue to learn to build resilient, fault tolerant systems on AWS!
