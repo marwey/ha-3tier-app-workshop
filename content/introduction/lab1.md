@@ -15,20 +15,18 @@ After the VPC has been created select it in the AWS VPC console and click **Acti
 
 ### Create public and private subnets in the new VPC
 
-Once the VPC has been created, the next step is to create the subnets that will be used to
-host the application across two different Availability Zones. We are going to create six
-subnets in total, three for each AZ, as shown in the following diagram:
+Once the VPC has been created, the next step is to create the subnets that will be used to host the application across two different Availability Zones. We are going to create six subnets in total, three for each AZ, as shown in the following diagram:
 
 ![Figure 2](/images/figure2.png)
 
-To create each of the six subnets please navigate to the VPC dashboard of your account,
-select **Subnets** , then click on **Create subnet** and use the details below. Make sure to always
-select the **Wordpress-workshop** VPC when creating the subnets.
+The first pair of subnets, *Public*, will be accessible from the Internet and contain load balancers and NAT gateways.  The second pair, *Application*, will contain application servers and your shared NFS filesystem.  Your application servers will be able to communicate with the Internet via the NAT gateways but will only be addressable from the load balancers.  Finally the *Database* pair of subnets will hold your active / passive relational database and data cache.  It will be accessible to other resources in the VPC but will have no access to the Internet and cannot be addressed by the Internet or the load balancers.
+
+To create each of the six subnets please select **Subnets** on the left of the AWS VPC console, then click on **Create subnet** and use the details in the table below to define the characteristics of each of your subnets. Make sure to always select the **Wordpress-workshop** VPC when creating the subnets.
 
 ![Figure 3](/images/figure3.png)
 
 {{% notice info %}}
-The screenshots below were taken in Ireland (eu-west-1), if you are building in a different AWS region please just ensure that you create your subnets in 2 different availability zones in the same region, such as **us-west-2a** and **us-west-2b**.
+The screenshots below were taken in Ireland (eu-west-1), if you are building in a different AWS region please just ensure that you create your subnets in 2 different availability zones in the same region, such as *us-west-2a* and *us-west-2b*.
 {{% /notice %}}
 
 For each subnet specify a name and a CIDR range for the subnet.  Be sure and create a public, application, and data subnet in each of two availability zones as detailed in the table below.
@@ -41,7 +39,7 @@ At this point all the correct subnets have been created and they can route netwo
 
 The following steps will allow connectivity from the Internet to the public subnets and also connectivity from the private subnets to the Internet via NAT gateways.
 
-First you need to create a new Internet Gateway (IGW) from your VPC dashboard and attach it to the **Wordpress-workshop** VPC.  Start by clicking **Internet Gateways** on the left hand side of the VPC console and then click the **Create internet gateway** button.  Enter a name for your IGW such as `WP Internet Gateway` and click **Create**.  After the IGW has been created you need to associate it with your VPC by attaching it to your VPC:
+First you need to create a new Internet Gateway (IGW) from your VPC dashboard and attach it to the `Wordpress-workshop` VPC.  Start by clicking **Internet Gateways** on the left hand side of the VPC console and then click the **Create internet gateway** button.  Enter a name for your IGW such as `WP Internet Gateway` and click **Create**.  After the IGW has been created you need to associate it with your VPC by attaching it to your VPC:
 
 ![Figure 12](/images/figure12.png)
 
@@ -49,7 +47,7 @@ The gateway will be used by instances and services hosted in the public subnets 
 Subnet A and Public Subnet B) to communicate over the Internet.
 
 Once the gateway is created you will need to create a new routing table and associate it with
-the public subnets.  Create a new route table by selecting **Route tables** in the left-hand menu of the console.
+the public subnets.  Create a new route table by selecting **Route Tables** in the left-hand menu of the console.
 
 ![Figure 13](/images/figure13.png)
 

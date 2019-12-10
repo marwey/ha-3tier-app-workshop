@@ -7,7 +7,7 @@ Memcached is a server-side caching mechanism that reduces the database load by c
 
 In this lab you will create a managed deployment of Memcached.  To start you will need to create a client and a server security group to protect your Memcached instances.  
 
-## Create cache security groups
+### Create cache security groups
 
 Visit the [AWS VPC console](https://console.aws.amazon.com/vpc/home) and create 2 security groups.  The first security group should be named something like *WP Cache Client SG* and the second security group should be named *WP Cache SG*.  
 
@@ -15,7 +15,7 @@ With both groups created edit the **Inbound Rules** of the *WP Cache SG* securit
 
 Now you are ready to create your Memcached instance.
 
-## Create an ElastiCache Memcached instance
+### Create an ElastiCache Memcached instance
 
 To create an ElastiCache instance open the [Amazon ElastiCache console](https://console.aws.amazon.com/elasticache/home) and click on **Memcached**, and click on **Create** to spin up your first cluster. Ensure that **Memcached** is selected and you have given your cache a name.
 

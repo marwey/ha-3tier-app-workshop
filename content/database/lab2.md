@@ -3,7 +3,7 @@ title: "Lab 2: Set up your RDS database"
 weight: 200
 ---
 
-## Create database security groups
+### Create database security groups
 
 Visit the [AWS VPC console](https://console.aws.amazon.com/vpc/home) and create 2 security groups.  The first security group should be named something like *WP Database Client SG* and the second security group should be named *WP Database SG*.  
 

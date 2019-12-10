@@ -5,7 +5,7 @@ weight: 200
 
 Amazon Elastic Filesystem (EFS) provides you with a managed NFS cluster which is compatible with NFS v4.1.  In this lab you will create an EFS cluster that will provide a shared filesystem for your web application servers.
 
-## Create filesystem security groups
+### Create filesystem security groups
 
 Visit the [AWS VPC console](https://console.aws.amazon.com/vpc/home) and create 2 security groups.  The first security group should be named something like *WP FS Client SG* and the second security group should be named *WP FS SG*.  
 
@@ -13,7 +13,7 @@ With both groups created edit the **Inbound Rules** of the *WP FS SG* security g
 
 Now you are ready to create your EFS cluster.
 
-## Create the EFS cluster
+### Create the EFS cluster
 
 To create an EFS cluster visit the [Amazon EFS console](https://console.aws.amazon.com/efs/home) and click **Create file system**.
 
