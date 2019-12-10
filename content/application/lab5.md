@@ -3,17 +3,43 @@ title: "Lab 5: Autoscaling and load balancing"
 weight: 300
 ---
 
+You have created a software-defined network across multiple fault-isolated data centers, deployed an HA active / passive MySQL database, a managed Memcached instance, and a distributed NFS cluster for shared storage.  In this last and final lab you will deploy an HA application server running PHP to use these resources as part of a scalable Wordpress installation.  
+
+---
+
+## Create load balancer and application security groups
+
+Visit the [AWS VPC console](https://console.aws.amazon.com/vpc/home) and create 2 security groups.  The first security group should be named something like *WP Load Balancer SG* and the second security group should be named *WP Wordpress SG*.  
+
+Edit the **Inbound Rules** for **WP Load Balancer SG** and allow HTTP traffic on port 80 from `0.0.0.0/0` (indicating from anywhere).
+
+Edit the **Inbound Rules** for **WP Wordpress SG** and only allow HTTP traffic on port 80 from the **WP Load Balancer SG**.
+
+### Create a load balancer
+
+A load balancer distributes incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones, increasing the availability of the Wordpress platform.
+
+From the EC2 console click **Load Balancers** on the left-hand menu and then click **Create Load Balancer**.  Under *Application Load Balancer* click **Create**.  
+
+Give your load balancer a name and under **Availability Zones** select your VPC.  Then tick the checkbox for both availability zones and select your public subnets as created in the first lab.  
+
+![Figure 8](/images/asg8.png)
+
+Click **Next: Configure Security Groups**.
+
+Select the **WP Load Balancer SG** created earlier and click **Next: Configure Routing**.
+
+Give the target group a name and click **Next: Register Targets**.  Click **Next: Review** without defining any targets and then click **Create**.
+
+![Figure 12](/images/asg12.png)
+
+Make a note of the **DNS name** created for your load balancer as you will need this in the following steps.
+
 ### Create a launch configuration for the Auto Scaling Groups (ASG)
 
 A launch configuration is an instance configuration template that an Auto Scaling Group uses to launch EC2 instances. When you create launch configurations you need to specify configuration information for the instances, including the ID of the Amazon Machine Image (AMI), the instance type, a key pair, one or more security groups, and a block device mapping. 
 
-First you will need to create a new security group that allows access from the security group of your Load Balancers to your web servers, on port 80/tcp:
-
-![Figure 1] (/images/sg1.png)
-
-Once you've done that, select **Launch configurations** in your EC2 dashboard, then click on **Create launch configuration**. On the next screen click on the **AWS Marketplace** tab, search for **Wordpress** and select the AMI highlighted below:
-
-![Figure 1](/images/asg1.png)
+Select **Launch configurations** in your EC2 dashboard, then click on **Create launch configuration**. Choose the **Amazon Linux AMI** by clicking the corresponding **Select** button for the image.
 
 Select the instance type:
 
@@ -24,30 +50,21 @@ Create your launch configuration:
 ![Figure 3](/images/asg3.png)
 
 Paste the script below in the User Data field, while replacing the parameters accordingly:
-```bash
-#!/bin/bash
-cd /opt/bitnami/apps/wordpress/htdocs
-rm wp-config.php
-sudo -u bitnami -i -- wp core config --dbname=workshop --dbuser=wpadmin --dbpass=<Your RDS Master password> --dbhost=<The endpoint of your DB cluster or writer node>
-sudo -u bitnami -i -- wp db create
-sudo -u bitnami -i -- wp core install --url=`curl http://169.254.169.254/latest/meta-data/public-ipv4` --title=Wordpress-Workshop --admin_user=wpadmin --admin_password=AlwaysCh00seAStrongPassw0rd --admin_email=admin@example.com
-```
 
-{{% notice info %}}
-What follows is potential alternate user data based on reference architecture to be used with Amazon Linux (NOT Amazon Linux 2)
-{{% /notice %}}
 ```bash
 #!/bin/bash -xe
 
-EFS_MOUNT="fs-60d43c38.efs.eu-central-1.amazonaws.com"
+EFS_MOUNT="<YOUR-EFS-HOSTNAME>"
 
 DB_NAME="wordpress"
-DB_HOSTNAME="wpdbv2-instance-1.cdq1du7ewx3u.eu-central-1.rds.amazonaws.com"
-DB_USERNAME="dbadmin"
-DB_PASSWORD="DbPassword$"
+DB_HOSTNAME="<YOUR-DB-HOSTNAME>"
+DB_USERNAME="<YOUR-DB-USERNAME>"
+DB_PASSWORD="<YOUR-DB-PASSWORD>"
 
 WP_ADMIN="wpadmin"
 WP_PASSWORD="WpPassword$"
+
+LB_HOSTNAME="<YOUR-ALB-HOSTNAME>"
 
 yum update -y
 yum install -y awslogs httpd24 mysql56 php55 php55-devel php55-pear php55-mysqlnd gcc-c++ php55-opcache
@@ -91,7 +108,7 @@ if [ ! -d /var/www/wordpress/wordpress ]; then
    if ! $(wp core is-installed --allow-root); then
        wp core download --version='4.9' --locale='en_GB' --allow-root
        wp core config --dbname="$DB_NAME" --dbuser="$DB_USERNAME" --dbpass="$DB_PASSWORD" --dbhost="$DB_HOSTNAME" --dbprefix=wp_ --allow-root
-       wp core install --url='http://www.example.com' --title='Wordpress on AWS' --admin_user="$WP_ADMIN" --admin_password="$WP_PASSWORD" --admin_email='admin@example.com' --allow-root
+       wp core install --url="http://$LB_HOSTNAME" --title='Wordpress on AWS' --admin_user="$WP_ADMIN" --admin_password="$WP_PASSWORD" --admin_email='admin@example.com' --allow-root
        wp plugin install w3-total-cache --allow-root
        # sed -i \"/$table_prefix = 'wp_';/ a \\define('WP_HOME', 'http://' . \\$_SERVER['HTTP_HOST']); \" /var/www/wordpress/wordpress/wp-config.php
        # sed -i \"/$table_prefix = 'wp_';/ a \\define('WP_SITEURL', 'http://' . \\$_SERVER['HTTP_HOST']); \" /var/www/wordpress/wordpress/wp-config.php
@@ -127,7 +144,15 @@ fi
 chkconfig httpd on
 service httpd start
 ```
-When reaching the **Configure security group** page, please select the **ALB_to_application** security group that you've created earlier and then click **Review** to review and submit the final configuration.
+
+Then click **Next: Configure Security Groups** and select the following security groups:
+
+ - WP Cache Client SG
+ - WP DB Client SG
+ - WP EFS Client SG
+ - WP Application SG
+
+Click **Review** to review and submit the final configuration.  You can disregard warnings about being able to SSH into the server and can also choose *Proceed without keypair* as you will not need to remotely access these servers.
 
 ### Create the ASG for the back-end web servers
 
@@ -139,45 +164,16 @@ In the next screen make sure that the correct VPC is selected, together with the
 
 ![Figure 5](/images/asg5.png)
 
-Next, configure the scaling policies as follows:
+Under **Advanced Details** tick the box next to **Load Balancing** and for **Target Groups** select the target group you created earlier.
+
+Click **Next: Configure scaling policies** and configure the scaling policies as follows:
 
 ![Figure 6](/images/asg6.png)
 
-### Set up Elastic Load Balancing
+Click through and accept the remaining defaults to complete the creation of your auto scaling group.
 
-A load balancer distributes incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones, increasing the availability of the Wordpress platform.
+The autoscaling group will now begin creating the desired number of EC2 instances based on the launch configuration you created.  As the systems come online the target group is updated with the instance details for your EC2 instances and the load balancer will begin distributing traffic across the instances.  As instances are added or removed the autoscaling group and load balancer will work in concert with one another to ensure that only healthy instances receive traffic.
 
-To create a new Application Load Balancer select **Load Balancers** in your EC2 dashboard, click on **Create Load Balancer** and follow the guidelines below:
+---
 
-![Figure 7](/images/asg7.png)
-
-When configuring the load balancer make sure you choose the correct VPC, together with the correct public subnets from each Availability Zone:
-
-![Figure 8](/images/asg8.png)
-
-Then select the default security group associated with your VPC:
-
-![Figure 9](/images/asg9.png)
-
-Configure the target groups and routing policies:
-
-![Figure 10](/images/asg10.png)
-
-Now add the two instances created by the autoscaling group in the previous step to the ELB’s registered targets:
-
-![Figure 11](/images/asg11.png)
-
-Once you submit the final configuration you will be able to see the load balancer in your EC2 dashboard:
-
-![Figure 12](/images/asg12.png)
-
-As a last step, go back to the Autoscaling Groups, select **Wordpress-workshop-ASG**, then click on **Actions, Edit** and add the ELB target group created earlier (i.e. Wordpress-workshop) under the **Target Groups** setting:
-
-![Figure 13](/images/asg13.png)
-
-
-
-
-
-
-
+You have now created a highly-available auto-scaling deployment of Wordpress that will scale in and out in response to client traffic hitting the website.  Lets now review, end to end, what you have accomplished.
