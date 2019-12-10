@@ -184,6 +184,12 @@ Click through and accept the remaining defaults to complete the creation of your
 
 The autoscaling group will now begin creating the desired number of EC2 instances based on the launch configuration you created.  As the systems come online the target group is updated with the instance details for your EC2 instances and the load balancer will begin distributing traffic across the instances.  As instances are added or removed the autoscaling group and load balancer will work in concert with one another to ensure that only healthy instances receive traffic.
 
+![Healthy Targets](/images/healthy_targets.png)
+
+When your targets are deemed healthy in your target group you can open the DNS name for your Application Load Balancer in your web browser to view your newly created Wordpress installation.
+
+![Wordpress Screenshot](/images/wp_screenshot.png)
+
 ---
 
 You have now created a highly-available auto-scaling deployment of Wordpress that will scale in and out in response to client traffic hitting the website.  Lets now review, end to end, what you have accomplished.
