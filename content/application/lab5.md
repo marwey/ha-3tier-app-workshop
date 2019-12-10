@@ -7,7 +7,19 @@ You have created a software-defined network across multiple fault-isolated data 
 
 ---
 
-## Create load balancer and application security groups
+### Create an IAM role
+
+EC2 instances can be granted access to AWS APIs using temporary credentials granted through an [Instance Profile](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html).  An Instance Profile is an IAM role which can be assigned to an EC2 instance.  In the event that you wish to have shell-level access to the Amazon Linux operating system of your Wordpress application servers you can allow for SSH access to the instances or you can use [AWS Systems Manager Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html).  
+
+Session Manager provides shell access via the AWS console and is easily configured when using Amazon Linux.  It has the added benefit of sending all keystrokes to CloudWatch logs so that you have an audit trail of activity on your instances.  To use Session Manager we will create an IAM role and reference it later when we create the Launch Configuration for our Wordpress application servers.
+
+Access the [AWS IAM console](https://console.aws.amazon.com/iam/home) and click **Roles** on the left-hand side.  Then click **Create role** to begin creating a role for your Wordpress application servers.  
+
+Select `AWS Service` -> `EC2` as the type of Trusted Entity and click **Next: Permissions**.  On the next screen search for the managed policy `AmazonSSMManagedInstanceCore`, tick the checkbox next to the policy and click **Next: Tags**.  Click **Next: Review**, give your role a name such as `Wordpress-Application-Role` and click **Create role**.
+
+Later, when your EC2 instances are running with this role attached, if you need shell-level access to any of them you can make a note of the Instance ID and from the [Session Manager console](https://console.aws.amazon.com/systems-manager/session-manager/sessions) start a web-based shell session.
+
+### Create load balancer and application security groups
 
 Visit the [AWS VPC console](https://console.aws.amazon.com/vpc/home) and create 2 security groups.  The first security group should be named something like *WP Load Balancer SG* and the second security group should be named *WP Wordpress SG*.  
 
@@ -45,7 +57,7 @@ Select the instance type:
 
 ![Figure 2](/images/asg2.png)
 
-Create your launch configuration:
+Create your launch configuration.  Specify the IAM role you created earlier so that you can access the EC2 instances created using Session Manager.
 
 ![Figure 3](/images/asg3.png)
 
