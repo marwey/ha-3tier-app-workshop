@@ -27,6 +27,8 @@ To complete the setup of your EFS cluster click **Create File System**.
 
 This will create two mount targets in your subnets and after a few minutes the targets will reach a state of *Available*. 
 
+![EFS Complete](/images/efs_complete.png)
+
 ---
 
 You now have an EFS cluster ready and available for your use.  In the next lab you will create the application servers that will connect to and use these resources to serve your clients.

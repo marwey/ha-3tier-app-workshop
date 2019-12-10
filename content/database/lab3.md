@@ -17,7 +17,7 @@ Now you are ready to create your Memcached instance.
 
 ## Create an ElastiCache Memcached instance
 
-To create an ElastiCache instance open the [Amazon ElastiCache console](https://console.aws.amazon.com/elasticache/home) and click on **Memcached** and finally click on **Create** to spin up your first cluster:
+To create an ElastiCache instance open the [Amazon ElastiCache console](https://console.aws.amazon.com/elasticache/home) and click on **Memcached**, and click on **Create** to spin up your first cluster. Ensure that **Memcached** is selected and you have given your cache a name.
 
 ![Figure 1](/images/ec1.png)
 

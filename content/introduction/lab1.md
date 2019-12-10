@@ -49,7 +49,7 @@ The gateway will be used by instances and services hosted in the public subnets 
 Subnet A and Public Subnet B) to communicate over the Internet.
 
 Once the gateway is created you will need to create a new routing table and associate it with
-the public subnets:
+the public subnets.  Create a new route table by selecting **Route tables** in the left-hand menu of the console.
 
 ![Figure 13](/images/figure13.png)
 

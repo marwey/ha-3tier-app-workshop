@@ -3,6 +3,14 @@ title: "Lab 2: Set up your RDS database"
 weight: 200
 ---
 
+## Create database security groups
+
+Visit the [AWS VPC console](https://console.aws.amazon.com/vpc/home) and create 2 security groups.  The first security group should be named something like *WP Database Client SG* and the second security group should be named *WP Database SG*.  
+
+With both groups created edit the **Inbound Rules** of the *WP Database SG* security group and create a rule of type *MySQL / Aurora* which allows traffic on port `3306` from the *WP Database Client SG*.
+
+Now you are ready to create your RDS database.
+
 ### Create an RDS subnet group
 
 Amazon RDS provides managed database deployments.  When you use Amazon RDS to deploy a database in a highly available fashion it will create 2 instances in 2 different availability zones.  To do this, when you create a database deployment you specify a subnet group which tells RDS in which subnets it can deploy your database instances.  
@@ -34,19 +42,17 @@ Select the DB instance size together with a Multi-AZ deployment, required for hi
 
 ![Figure 6](/images/rds6.png)
 
-In the connectivity section, make sure you select the correct VPC, together with the DB subnet group created earlier:
+In the connectivity section, make sure you select the correct VPC, together with the DB subnet group, and security group created earlier:
 
 ![Figure 7](/images/rds7.png)
 
-Finally, click on Create database to start building the cluster:
+Expand **Additional configuration** and specify an **Initial database name** of *wordpress*.
+
+Finally, click on **Create database** to start building the cluster:
 
 ![Figure 8](/images/rds8.png)
 
-The database will take a few minutes to be provisioned and made available.  While it is being setup you will modify the security group that you specified.  You will create a *database client* security group and only allow this security group to access your database.  To do this start by visiting the [AWS VPC console](https://console.aws.amazon.com/vpc/home).
-
-Click on **Security Groups** in the left-hand side menu to get started.  Next create the client security group by clicking **Create security group** and give your client security group a name such as `WP Database Client SG`.  Give your security group a description and associate it with your VPC, then click **Create**.
-
-Return to the list of security groups and select the security group that was created for your database.  If you review the **Inbound Rules** it will show a single rule allowing communication with the database from the IP address of the device you used to create the database.  Modify this rule to only allow communication from the security group you created in the previous step.
+The database will take a few minutes to be provisioned and made available.  
 
 ---
 
