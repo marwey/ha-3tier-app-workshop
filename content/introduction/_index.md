@@ -4,4 +4,4 @@ chapter: true
 weight: 10
 ---
 
-In this workshop, we will explore how to configure your VPC, EC2, EFS, and ElastiCache to build a highly available, auto-scaling 3-tier web application.
+In this workshop, we will explore how to configure AWS VPC, Amazon Aurora RDS, Amazon EC2, Amazon EFS, and Amazon ElastiCache to build a highly available, auto-scaling multi-tier web application.

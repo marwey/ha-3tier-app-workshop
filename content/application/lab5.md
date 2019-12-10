@@ -49,7 +49,16 @@ Create your launch configuration:
 
 ![Figure 3](/images/asg3.png)
 
-Paste the script below in the User Data field, while replacing the parameters accordingly:
+Paste the script below in the User Data field.  Be sure and set the following values accordingly:
+
+ - EFS_MOUNT
+ - DB_NAME
+ - DB_HOSTNAME
+ - DB_USERNAME
+ - DB_PASSWORD
+ - WP_ADMIN
+ - WP_PASSWORD
+ - LB_HOSTNAME
 
 ```bash
 #!/bin/bash -xe
@@ -150,7 +159,7 @@ Then click **Next: Configure Security Groups** and select the following security
  - WP Cache Client SG
  - WP DB Client SG
  - WP EFS Client SG
- - WP Application SG
+ - WP Wordpress SG
 
 Click **Review** to review and submit the final configuration.  You can disregard warnings about being able to SSH into the server and can also choose *Proceed without keypair* as you will not need to remotely access these servers.
 
