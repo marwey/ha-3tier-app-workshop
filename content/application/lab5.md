@@ -117,6 +117,7 @@ if [ ! -d /var/www/wordpress/wordpress ]; then
    if ! $(wp core is-installed --allow-root); then
        wp core download --version='4.9' --locale='en_GB' --allow-root
        wp core config --dbname="$DB_NAME" --dbuser="$DB_USERNAME" --dbpass="$DB_PASSWORD" --dbhost="$DB_HOSTNAME" --dbprefix=wp_ --allow-root
+       wp db create --allow-root
        wp core install --url="http://$LB_HOSTNAME" --title='Wordpress on AWS' --admin_user="$WP_ADMIN" --admin_password="$WP_PASSWORD" --admin_email='admin@example.com' --allow-root
        wp plugin install w3-total-cache --allow-root
        # sed -i \"/$table_prefix = 'wp_';/ a \\define('WP_HOME', 'http://' . \\$_SERVER['HTTP_HOST']); \" /var/www/wordpress/wordpress/wp-config.php
