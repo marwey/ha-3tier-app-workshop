@@ -15,10 +15,10 @@ On Linux:
 
 #### Clone this repo:
 From wherever you checkout repos:
-`git clone git@github.com:jpbarto/wordpress-workshop.git` (or your fork)
+`git clone git@github.com:marwey/ha-3tier-app-workshop.git` (or your fork)
 
 #### Clone the theme submodule:
-`cd wordpress-workshop`
+`cd ha-3tier-app-workshop`
 
 `git submodule init` ;
 `git submodule update`
